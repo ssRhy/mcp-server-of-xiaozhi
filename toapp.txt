@@ -1,0 +1,10 @@
+{
+  "request_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479", // 唯一标识本次请求
+  "type": "guidemap",         // 工具类型，如 reminder, calendar, note, timer, alarm 等
+  "action": "add",            // 动作，如 add, update, delete, start, stop 等
+  "payload": {                // 具体内容，随type和action变化
+     "destination": destination,
+      "mode": mode,
+  },
+  "timestamp": "2025-08-31T21:00:00" // 服务器发出请求的时间（可选）
+}

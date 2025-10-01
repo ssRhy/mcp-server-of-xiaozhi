@@ -1,0 +1,10 @@
+Looking in indexes: https://mirrors.aliyun.com/pypi/simple/
+Collecting serpapi
+  Downloading https://mirrors.aliyun.com/pypi/packages/df/6a/21deade04100d64844e494353a5d65e7971fbdfddf78eb1f248423593ad0/serpapi-0.1.5-py2.py3-none-any.whl (10 kB)
+Requirement already satisfied: requests in /home/hy/.espressif/python_env/idf5.5_py3.10_env/lib/python3.10/site-packages (from serpapi) (2.32.5)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/hy/.espressif/python_env/idf5.5_py3.10_env/lib/python3.10/site-packages (from requests->serpapi) (3.4.3)
+Requirement already satisfied: idna<4,>=2.5 in /home/hy/.espressif/python_env/idf5.5_py3.10_env/lib/python3.10/site-packages (from requests->serpapi) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /home/hy/.espressif/python_env/idf5.5_py3.10_env/lib/python3.10/site-packages (from requests->serpapi) (1.26.20)
+Requirement already satisfied: certifi>=2017.4.17 in /home/hy/.espressif/python_env/idf5.5_py3.10_env/lib/python3.10/site-packages (from requests->serpapi) (2025.8.3)
+Installing collected packages: serpapi
+Successfully installed serpapi-0.1.5

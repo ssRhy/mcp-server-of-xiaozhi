@@ -1,0 +1,8 @@
+{
+  "request_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479", // 必须和请求一致
+  "type": "timer",         // 工具类型，和请求一致
+  "action": "result",         // 固定为 result 或 feedback
+  "status": "success",        // success / fail / skipped
+  "message": "倒计时已设置",     // 结果说明（可选）
+  "timestamp": "2025-08-08T21:00:05" // 反馈时间（可选）
+}

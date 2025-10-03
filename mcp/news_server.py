@@ -12,9 +12,21 @@ from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import uvicorn
 import asyncio
+import socket
 
 # 创建 MCP 服务器（用于 SSE 端点）
 mcp = FastMCP("GoogleNews", host="0.0.0.0", port=8004)
+
+def get_local_ip():
+    """获取本机IP地址"""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return '127.0.0.1'
 
 @mcp.tool()
 def search_google_news(keyword: str) -> dict:
@@ -82,20 +94,21 @@ async def call_tool(request: ToolCallRequest):
 
 @app.get("/")
 async def root():
+    local_ip = get_local_ip()
     return {
         "service": "GoogleNews MCP Server", 
         "status": "running",
         "modes": ["REST API (port 8003)", "MCP SSE (port 8004)"],
         "endpoints": {
-            "rest": "http://192.168.175.31:8003/tools/call",
-            "mcp_sse": "http://192.168.175.31:8004/sse"
+            "rest": f"http://{local_ip}:8003/tools/call",
+            "mcp_sse": f"http://{local_ip}:8004/sse"
         },
         "note": "Use REST API for ESP32 devices, MCP SSE for standard MCP clients"
     }
 
 if __name__ == "__main__":
-    # 运行 REST API 服务器
-    uvicorn.run(app, host="0.0.0.0", port=8003)
+    local_ip = get_local_ip()
+    uvicorn.run(app, host=local_ip, port=8003)
     
     # 如果需要同时运行 MCP SSE 服务器，可以在另一个终端运行：
     # python -c "from mcp.server.fastmcp import FastMCP; from news_server import mcp; mcp.run(transport='sse')"

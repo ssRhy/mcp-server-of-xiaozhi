@@ -11,6 +11,7 @@ from serpapi import GoogleSearch
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
+import socket
 
 # 创建 MCP 服务器
 mcp = FastMCP("AmazonShopping", host="0.0.0.0", port=8002)
@@ -63,6 +64,17 @@ def search_amazon_products(keyword: str, max_results: int = 1) -> dict:
 # 创建 FastAPI 应用，提供 REST API
 app = FastAPI(title="AmazonShopping MCP Server")
 
+def get_local_ip():
+    """获取本机IP地址"""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return '127.0.0.1'
+
 class ToolCallRequest(BaseModel):
     name: str
     arguments: dict
@@ -85,13 +97,14 @@ async def call_tool(request: ToolCallRequest):
 
 @app.get("/")
 async def root():
+    local_ip = get_local_ip()
     return {
         "service": "AmazonShopping MCP Server", 
         "status": "running",
         "modes": ["REST API (port 8002)", "MCP SSE (optional)"],
         "endpoints": {
-            "rest": "http://192.168.175.31:8002/tools/call",
-            "mcp_sse": "http://192.168.175.31:8002/sse (if enabled)"
+            "rest": f"http://{local_ip}:8002/tools/call",
+            "mcp_sse": f"http://{local_ip}:8002/sse (if enabled)"
         },
         "note": "Use REST API for ESP32 devices, MCP SSE for standard MCP clients"
     }
@@ -101,5 +114,5 @@ async def health():
     return {"status": "healthy"}
 
 if __name__ == "__main__":
-    # 运行 REST API 服务器
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    local_ip = get_local_ip()
+    uvicorn.run(app, host=local_ip, port=8002)

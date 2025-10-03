@@ -48,7 +48,7 @@ async def test_news_server():
     try:
         async with aiohttp.ClientSession() as session:
             # 测试服务是否在线
-            async with session.get("http://192.168.175.31:8003") as response:
+            async with session.get("http://127.0.0.1:8003") as response:
                 if response.status != 200:
                     raise Exception(f"服务器返回状态码: {response.status}")
                 print("\n✅ 服务器在线")
@@ -61,7 +61,7 @@ async def test_news_server():
                     "keyword": "technology"
                 }
             }
-            async with session.post("http://192.168.175.31:8003/tools/call", json=data) as response:
+            async with session.post("http://127.0.0.1:8003/tools/call", json=data) as response:
                 if response.status != 200:
                     raise Exception(f"工具调用失败，状态码: {response.status}")
                 result = await response.json()
